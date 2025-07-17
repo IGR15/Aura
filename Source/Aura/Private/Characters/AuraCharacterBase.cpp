@@ -1,7 +1,7 @@
 // IGR1S
 
 
-#include "AuraCharacterBase.h"
+#include "Characters/AuraCharacterBase.h"
 
 // Sets default values
 AAuraCharacterBase::AAuraCharacterBase()
