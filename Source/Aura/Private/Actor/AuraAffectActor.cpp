@@ -2,50 +2,42 @@
 
 
 #include "Actor/AuraAffectActor.h"
-
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "AbilitySystemInterface.h"
-#include "AbilitySyste/AuraAttributeSet.h"
-#include "Components/SphereComponent.h"
+
 
 // Sets default values
 AAuraAffectActor::AAuraAffectActor()
 {
  	PrimaryActorTick.bCanEverTick = false;
-	Mesh= CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	SetRootComponent(Mesh);
-	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
-	Sphere->SetupAttachment(GetRootComponent());
-	
+	SetRootComponent( CreateDefaultSubobject<USceneComponent>("SceneRoot"));
 }
 
-void AAuraAffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(OtherActor))
-	{
-		const UAuraAttributeSet* AttributeSet = Cast<UAuraAttributeSet>(AbilitySystemInterface->GetAbilitySystemComponent()->GetAttributeSet(UAuraAttributeSet::StaticClass()));
-		UAuraAttributeSet* MutableSet=const_cast<UAuraAttributeSet*>(AttributeSet);
-		MutableSet->SetHealth(AttributeSet->GetHealth()+25.f);
-		MutableSet->SetMana(AttributeSet->GetMana()-25.f);
-
-		Destroy();
-	}
-}
-
-void AAuraAffectActor::EndOverLap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	
-}
 
 
 
 void AAuraAffectActor::BeginPlay()
 {
 	Super::BeginPlay();
-	Sphere->OnComponentBeginOverlap.AddDynamic(this , &AAuraAffectActor::OnOverlap);
-	Sphere->OnComponentEndOverlap.AddDynamic(this , &AAuraAffectActor::EndOverLap);
+	
+	
+}
+
+void AAuraAffectActor::ApplyEffictToActor(AActor* Target, TSubclassOf<UGameplayEffect> GamePlayEffectClass)
+{
+	
+	UAbilitySystemComponent* TargetAbilitySystemComponent= UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Target);
+	if (TargetAbilitySystemComponent==nullptr)return;
+	check(GamePlayEffectClass);
+	
+	// a handel is a light wight wrapper that handles context and its data 
+	FGameplayEffectContextHandle EffectContextHandle= TargetAbilitySystemComponent->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
+	
+	//this is also a Wrapper that holds the effectSpec
+	const FGameplayEffectSpecHandle EffectSpecHandle = TargetAbilitySystemComponent->MakeOutgoingSpec(GamePlayEffectClass,1.f,EffectContextHandle);
+	
+	TargetAbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 	
 }
 
