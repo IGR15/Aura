@@ -21,9 +21,12 @@ public:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
-	void ApplyEffictToActor(AActor* Target,TSubclassOf<UGameplayEffect>GamePlayEffectClass);
+	void ApplyEffictToActor(AActor* TargetActor,TSubclassOf<UGameplayEffect>GamePlayEffectClass);
 	
-	UPROPERTY(EditAnywhere,Category="Applied Effects")
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Applied Effects")
 	TSubclassOf<UGameplayEffect> InsantGampelayEffectClass;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Applied Effects")
+	TSubclassOf<UGameplayEffect> DurationGampelayEffectClass;
 	
 };

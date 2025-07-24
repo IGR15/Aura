@@ -23,10 +23,12 @@ void AAuraAffectActor::BeginPlay()
 	
 }
 
-void AAuraAffectActor::ApplyEffictToActor(AActor* Target, TSubclassOf<UGameplayEffect> GamePlayEffectClass)
+void AAuraAffectActor::ApplyEffictToActor(AActor* TargetActor, TSubclassOf<UGameplayEffect> GamePlayEffectClass)
 {
+	//you can do all of this in blueprint
+
 	
-	UAbilitySystemComponent* TargetAbilitySystemComponent= UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Target);
+	UAbilitySystemComponent* TargetAbilitySystemComponent= UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 	if (TargetAbilitySystemComponent==nullptr)return;
 	check(GamePlayEffectClass);
 	
