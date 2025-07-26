@@ -78,6 +78,8 @@ protected:
 
 	TMap<uint32, FActiveGameplayEffectHandle> ActiveInfiniteEffects;
 
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Applied Effects")
+	float ActorLevel=1.f;
 
 	// TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> AcitveEffectHandles;
 };

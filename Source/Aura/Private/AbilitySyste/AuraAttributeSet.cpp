@@ -8,6 +8,10 @@
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 
+FEffectProperties::FEffectProperties()
+{
+}
+
 UAuraAttributeSet::UAuraAttributeSet()
 {
 	InitHealth(60.f);

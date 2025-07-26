@@ -37,7 +37,7 @@ void AAuraAffectActor::ApplyEffictToActor(AActor* TargetActor, TSubclassOf<UGame
 	EffectContextHandle.AddSourceObject(this);
 	
 	//this is also a Wrapper that holds the effectSpec
-	const FGameplayEffectSpecHandle EffectSpecHandle = TargetAbilitySystemComponent->MakeOutgoingSpec(GamePlayEffectClass,1.f,EffectContextHandle);
+	const FGameplayEffectSpecHandle EffectSpecHandle = TargetAbilitySystemComponent->MakeOutgoingSpec(GamePlayEffectClass,ActorLevel,EffectContextHandle);
 	
 	FActiveGameplayEffectHandle ActiveEffectHandle= TargetAbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 
