@@ -23,11 +23,18 @@ public:
 	
 	virtual void HighLightActor() override;
 	virtual void UnHighLightAcotr() override;
+
+	/**CombatInterface */
+	virtual int32 GetPlayerLevel() override;
+	/** EndCombatIterface*/
 protected:
 	
 	virtual void BeginPlay() override;
 
 	virtual void InitAbilityActorInfor()override;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="charcter class defaults")
+	int32 level=1;
 
 	
 	
