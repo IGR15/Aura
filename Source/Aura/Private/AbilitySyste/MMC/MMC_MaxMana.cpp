@@ -33,4 +33,3 @@ float UMMC_MaxMana::CalculateBaseMagnitude_Implementation(const FGameplayEffectS
 	return 30.f+2.5f*Inelligenc+5.f*PlayerLevel;
 }
 
-
