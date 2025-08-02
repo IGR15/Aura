@@ -9,8 +9,8 @@ FAuraGameplayTags FAuraGameplayTags::GameplayTags;
 void FAuraGameplayTags::InitilizeNativeGameplayTags()
 {
 	//secondary Attributes
-	GameplayTags.Attributes_Secondary_Armor=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.Armor"),FString("Reduces Damag Taken,Improves Block chance"));
-	GameplayTags.Attributes_Secondary_ArmorPenetraion==UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.ArmorPenetraion"),FString("Ignores Percentage of enemy armor, increases critical hit chance"));
+	GameplayTags.Attributes_Secondary_Armor=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.Armor"),FString("Reduces Damage Taken,Improves Block chance"));
+	GameplayTags.Attributes_Secondary_ArmorPenetration==UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.ArmorPenetration"),FString("Ignores Percentage of enemy armor, increases critical hit chance"));
 	GameplayTags.Attributes_Secondary_BlockChance==UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.BlockChance"),FString("chance to cut incoming damage in half"));
 	GameplayTags.Attributes_Secondary_CriticalHitChance==UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.CriticalHitChance"),FString("chance to double damage plus critical hit bonus"));
 	GameplayTags.Attributes_Secondary_CriticalHitDamage==UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.CriticalHitDamage"),FString("bonus damage added when a critical hit is scored"));

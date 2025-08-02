@@ -99,9 +99,9 @@ public:
 	FGameplayAttributeData Armor;
 	ATTRIBUTE_ACCESSORS_BASIC(UAuraAttributeSet,Armor);
 
-	UPROPERTY(BlueprintReadOnly,Category="Secondary Aattributes",ReplicatedUsing= OnRep_ArmorPenetraion)
-	FGameplayAttributeData ArmorPenetraion;
-	ATTRIBUTE_ACCESSORS_BASIC(UAuraAttributeSet,ArmorPenetraion);
+	UPROPERTY(BlueprintReadOnly,Category="Secondary Aattributes",ReplicatedUsing= OnRep_ArmorPenetration)
+	FGameplayAttributeData ArmorPenetration;
+	ATTRIBUTE_ACCESSORS_BASIC(UAuraAttributeSet,ArmorPenetration);
 
 	UPROPERTY(BlueprintReadOnly,Category="Secondary Aattributes",ReplicatedUsing= OnRep_BlockChance)
 	FGameplayAttributeData BlockChance;
@@ -160,7 +160,7 @@ public:
 	void OnRep_Armor (const FGameplayAttributeData& OldArmor ) const;
 	
 	UFUNCTION()
-	void OnRep_ArmorPenetraion (const FGameplayAttributeData& OldArmorPenetraion ) const;
+	void OnRep_ArmorPenetration (const FGameplayAttributeData& OldArmorPenetration ) const;
 
 	UFUNCTION()
 	void OnRep_BlockChance (const FGameplayAttributeData& OldBlockChance ) const;
