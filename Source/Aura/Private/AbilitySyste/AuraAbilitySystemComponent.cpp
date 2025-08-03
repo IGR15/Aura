@@ -8,6 +8,8 @@
 void UAuraAbilitySystemComponent::AbilityActorInofSet()
 {
 	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponent::EffectApplied);
+	
+	
 
 }
 
