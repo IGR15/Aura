@@ -12,7 +12,6 @@
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
-
 USTRUCT()
 struct FEffectProperties
 {
@@ -38,6 +37,14 @@ struct FEffectProperties
 	FGameplayEffectContextHandle EffectContextHandle;
 	
 };
+/***
+ * created an alias to replace the long syntax
+ * typedef is specific to the FGamePlayAttribute() signature, but TStaticFuncPtr is generic to any signature chosen
+ */
+//typedef TBaseStaticDelegateInstance<FGameplayAttribute(),FDefaultDelegateUserPolicy>::FFuncPtr FAttributeFuncPtr;
+
+template<class T>
+using TStaticFuncPtr=typename TBaseStaticDelegateInstance<T,FDefaultDelegateUserPolicy>::FFuncPtr;
 /**
  * 
  */
@@ -54,7 +61,13 @@ public:
 	virtual void PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const override;
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 
+	//this is called Function Pointers
+	TMap<FGameplayTag,TStaticFuncPtr<FGameplayAttribute()>> TagsToAttributes;
+	//TMap<FGameplayTag,FAttributeFuncPtr> TagsToAttributes;
+	//TMap<FGameplayTag,FGameplayAttribute(*)()> TagsToAttributes;
+	//TMap<FGameplayTag,TBaseStaticDelegateInstance<FGameplayAttribute(),FDefaultDelegateUserPolicy>::FFuncPtr> TagsToAttributes;
 
+	//TBaseStaticDelegateInstance<FGameplayAttribute(),FDefaultDelegateUserPolicy>::FFuncPtr FunctionPointer;
 	/*
 	 * Primary Attributes 
 	 */
