@@ -13,7 +13,7 @@ void UMenuWidgetController::BroadCastInitValues()
 	
 	for (auto& Pair :AuraAttributeSet->TagsToAttributes)
 	{
-		BroadCastAttrubteInfo(Pair.Key,Pair.Value());
+		BroadCastAttribteInfo(Pair.Key,Pair.Value());
 	}
 	
 }
@@ -27,7 +27,7 @@ void UMenuWidgetController::BindCallbacks()
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value()).AddLambda(
 			[this,Pair,AS](const FOnAttributeChangeData& Data)
 			{
-				BroadCastAttrubteInfo(Pair.Key,Pair.Value());
+				BroadCastAttribteInfo(Pair.Key,Pair.Value());
 			}
 		);
 	}
