@@ -4,6 +4,7 @@
 #include "Characters/AuraCharacterBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySyste/AuraAbilitySystemComponent.h"
 
 // Sets default values
 AAuraCharacterBase::AAuraCharacterBase()
@@ -48,6 +49,13 @@ void AAuraCharacterBase::InitializeDefaultAttributes()const
 	ApplyEffectToSelf(DefaultPrimaryAttribute,1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttribute,1.f);
 	ApplyEffectToSelf(DefaultVitalAttribute,1.f);
+}
+
+void AAuraCharacterBase::AddCharacterAbilities()
+{
+	UAuraAbilitySystemComponent* AuraASC =CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	if (!HasAuthority())return;
+	AuraASC->AddCharacterAbilities(StartUpAbilities);
 }
 
 
