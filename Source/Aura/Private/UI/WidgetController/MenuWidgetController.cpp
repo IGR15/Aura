@@ -13,7 +13,7 @@ void UMenuWidgetController::BroadCastInitValues()
 	
 	for (auto& Pair :AuraAttributeSet->TagsToAttributes)
 	{
-		BroadCastAttribteInfo(Pair.Key,Pair.Value());
+		BroadCastAttributeInfo(Pair.Key,Pair.Value());
 	}
 	
 }
@@ -27,13 +27,13 @@ void UMenuWidgetController::BindCallbacks()
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value()).AddLambda(
 			[this,Pair,AS](const FOnAttributeChangeData& Data)
 			{
-				BroadCastAttribteInfo(Pair.Key,Pair.Value());
+				BroadCastAttributeInfo(Pair.Key,Pair.Value());
 			}
 		);
 	}
 }
 
-void UMenuWidgetController::BroadCastAttribteInfo(const FGameplayTag& AttributeTag, const FGameplayAttribute& Attribute)const
+void UMenuWidgetController::BroadCastAttributeInfo(const FGameplayTag& AttributeTag, const FGameplayAttribute& Attribute)const
 {
 	FAuraAttributeInfo Info =Attributeinfo->FindAttributeInfoForTag(AttributeTag);
 	Info.AttributeValue=Attribute.GetNumericValue(AttributeSet);

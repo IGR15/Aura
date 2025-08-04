@@ -28,7 +28,7 @@ public:
 	FAttributeInfoSignature AttributeInfoDelegate;
 
 private:
-	void  BroadCastAttribteInfo(const FGameplayTag& AttributeTag,const FGameplayAttribute& Attribute)const;
+	void  BroadCastAttributeInfo(const FGameplayTag& AttributeTag,const FGameplayAttribute& Attribute)const;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="GAS|Attributes")
