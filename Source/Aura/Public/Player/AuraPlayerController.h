@@ -14,6 +14,7 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 class IEnemyInterface;
+class USplineComponent;
 
 class UAuraAbilitySystemComponent;
 /**
@@ -45,6 +46,8 @@ private:
 	void CurserTrace();
 	TScriptInterface<IEnemyInterface> LastActor;
 	TScriptInterface<IEnemyInterface> ThisActor;
+	FHitResult CurserHit;
+
 	//this is a speacial pointer for interfaces
 
 	void AbilityInputTagPressed(FGameplayTag InputTag);
@@ -59,6 +62,21 @@ private:
 
 	UAuraAbilitySystemComponent* GetASC();
 
+	FVector CashedDestination=FVector::ZeroVector;
+
+	float FollowTime=0.f;
+
+	float ShortPressThreshold=0.5f;
+
+	bool bAutoRunning=false;
+	bool bTargeting=false;
 	
+	UPROPERTY(EditDefaultsOnly)
+	float AutoRunAcceptanceRadius=50.f;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USplineComponent> Spline;
+
+	void AutoRun();
 	
 };
