@@ -29,6 +29,11 @@ void AAuraCharacterBase::BeginPlay()
 	
 }
 
+FVector AAuraCharacterBase::GetCombatSocketLocation()
+{
+	return Weapon->GetSocketLocation(WeaponTimSocketName);
+}
+
 void AAuraCharacterBase::InitAbilityActorInfor()
 { 
 }
