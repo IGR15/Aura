@@ -19,5 +19,8 @@ protected:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TSubclassOf<AAuraProjectile> ProjectileClass;
+
+	UFUNCTION(BlueprintCallable,Category="ProjectileSpell")
+	void SpawnProjectile();
 	
 };

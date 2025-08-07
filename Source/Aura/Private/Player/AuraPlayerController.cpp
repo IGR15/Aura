@@ -56,12 +56,12 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
 	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
-		if (GetASC())GetASC()->AbilityInputTagReleased(InputTag);
+		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 		return;
 	}
 	if (bTargeting)
 	{
-		if (GetASC())GetASC()->AbilityInputTagReleased(InputTag);
+		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 	}
 	else
 	{
