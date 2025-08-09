@@ -21,6 +21,6 @@ protected:
 	TSubclassOf<AAuraProjectile> ProjectileClass;
 
 	UFUNCTION(BlueprintCallable,Category="ProjectileSpell")
-	void SpawnProjectile();
+	void SpawnProjectile(const FVector& ProjectileTargetLocation );
 	
 };

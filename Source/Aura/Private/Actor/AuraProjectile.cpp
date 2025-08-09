@@ -5,6 +5,8 @@
 
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AAuraProjectile::AAuraProjectile()
@@ -33,8 +35,31 @@ void AAuraProjectile::BeginPlay()
 	
 }
 
-void AAuraProjectile::OnsphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AAuraProjectile::Destroyed()
 {
-	
+	//for clint
+	if (!bHit&& !HasAuthority())
+	{
+		UGameplayStatics::PlaySoundAtLocation(this,ImpactSound,GetActorLocation(),FRotator::ZeroRotator);
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ImpacctEffect,GetActorLocation(),FRotator::ZeroRotator);
+
+	}
+	Super::Destroyed();
+}
+
+void AAuraProjectile::OnsphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+                                      UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	//for server
+	UGameplayStatics::PlaySoundAtLocation(this,ImpactSound,GetActorLocation(),FRotator::ZeroRotator);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ImpacctEffect,GetActorLocation(),FRotator::ZeroRotator);
+
+	if (HasAuthority())
+	{
+		Destroy();
+	}
+	else
+	{
+		bHit=true;
+	}
 }
