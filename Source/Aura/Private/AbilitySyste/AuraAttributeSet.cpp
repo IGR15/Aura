@@ -15,8 +15,7 @@ FEffectProperties::FEffectProperties()
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
-	InitHealth(60.f);
-	InitMana(40.f);
+	
 	
 	const FAuraGameplayTags& GameplayTags=FAuraGameplayTags::Get();
 	

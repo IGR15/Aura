@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UI/WidgetController/OverlayWidgetController.h"
 #include "Characters/AuraCharacterBase.h"
 #include "Interaction/EnemyInterface.h"
 #include "AuraEnemy.generated.h"
+
 class UWidgetComponent;
 /**
  * 
@@ -27,6 +29,11 @@ public:
 	/**CombatInterface */
 	virtual int32 GetPlayerLevel() override;
 	/** EndCombatIterface*/
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnMaxHealthChanged;
 protected:
 	
 	virtual void BeginPlay() override;
