@@ -2,6 +2,9 @@
 
 
 #include "AbilitySyste/Abilities/AuraProjectileSpell.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "Actor/AuraProjectile.h"
 #include "Interaction/CombatInterface.h"
 
@@ -22,8 +25,8 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 	if (CombatInterface)
 	{
 		const FVector SocketLocation=CombatInterface->GetCombatSocketLocation();
-		FRotator Rotation=(ProjectileTargetLocation-SocketLocation).Rotation();
-		Rotation.Pitch=0;
+		FRotator Rotation=(ProjectileTargetLocation - SocketLocation).Rotation();
+		Rotation.Pitch=0.f;
 		
 		FTransform SpawnTransform;
 		SpawnTransform.SetLocation(SocketLocation);
@@ -34,6 +37,10 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 			GetOwningActorFromActorInfo(),
 			Cast<APawn>(GetOwningActorFromActorInfo()),
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+		const UAbilitySystemComponent* SourceASC= UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+		
+		const FGameplayEffectSpecHandle SpecHandle= SourceASC->MakeOutgoingSpec(DamageEffectClass,GetAbilityLevel(),SourceASC->MakeEffectContext());
+		Projectile->DamageEffectSpecHandle=SpecHandle;
 		Projectile->FinishSpawning(SpawnTransform);
 	}
 }

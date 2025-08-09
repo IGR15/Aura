@@ -6,7 +6,7 @@
 #include "Characters/AuraCharacterBase.h"
 #include "Interaction/EnemyInterface.h"
 #include "AuraEnemy.generated.h"
-
+class UWidgetComponent;
 /**
  * 
  */
@@ -36,6 +36,7 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="charcter class defaults")
 	int32 level=1;
 
-	
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent>HealthBar;
 	
 };

@@ -3,9 +3,13 @@
 
 #include "Actor/AuraProjectile.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Aura/Aura.h"
+#include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -16,6 +20,7 @@ AAuraProjectile::AAuraProjectile()
 
 	Sphere=CreateDefaultSubobject<USphereComponent>("sphere");
 	SetRootComponent(Sphere);
+	Sphere->SetCollisionObjectType(ECC_Projectile);
 	Sphere->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
 	Sphere->SetCollisionResponseToAllChannels(ECR_Ignore);
 	Sphere->SetCollisionResponseToChannel(ECC_WorldDynamic,ECR_Overlap);
@@ -31,7 +36,10 @@ AAuraProjectile::AAuraProjectile()
 void AAuraProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+	SetLifeSpan(LifeSpan);
 	Sphere->OnComponentBeginOverlap.AddDynamic(this,&AAuraProjectile::OnsphereOverlap);
+
+	LoopingSoundComponent=UGameplayStatics::SpawnSoundAttached(LoopingSound,GetRootComponent());
 	
 }
 
@@ -42,6 +50,7 @@ void AAuraProjectile::Destroyed()
 	{
 		UGameplayStatics::PlaySoundAtLocation(this,ImpactSound,GetActorLocation(),FRotator::ZeroRotator);
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ImpacctEffect,GetActorLocation(),FRotator::ZeroRotator);
+		LoopingSoundComponent->Stop();
 
 	}
 	Super::Destroyed();
@@ -53,9 +62,15 @@ void AAuraProjectile::OnsphereOverlap(UPrimitiveComponent* OverlappedComponent, 
 	//for server
 	UGameplayStatics::PlaySoundAtLocation(this,ImpactSound,GetActorLocation(),FRotator::ZeroRotator);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ImpacctEffect,GetActorLocation(),FRotator::ZeroRotator);
+	LoopingSoundComponent->Stop();
 
 	if (HasAuthority())
 	{
+		if (UAbilitySystemComponent* TargetASC= UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
+		{
+			TargetASC->ApplyGameplayEffectSpecToSelf(*DamageEffectSpecHandle.Data.Get());
+		}
+		
 		Destroy();
 	}
 	else
