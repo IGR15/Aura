@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Data/CharacterClassInfo.h"
 #include "AuraAbilitySystemLibrary.generated.h"
 
+
+class UAbilitySystemComponent;
 class UMenuWidgetController;
 class UOverlayWidgetController;
 /**
@@ -22,4 +25,8 @@ public:
 
 	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|WidgetController")
 	static UMenuWidgetController* GetAttributeMenuWidgetController(const UObject* WorldContextObject);
+
+	//this will initialize base attributes based on attribute class and lvl
+	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|Character Class Defaultes")
+	static void InitializeDefaultAttributes(const UObject* WorldContextObject,ECharacterClass CharacterClass,float level,UAbilitySystemComponent* ASC);
 };
