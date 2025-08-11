@@ -12,7 +12,7 @@ class UCombatInterface : public UInterface
 {
 	GENERATED_BODY()
 };
-
+class UAnimMontage;
 /**
  * 
  */
@@ -28,4 +28,12 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
 	void UpdateFacingTarget(const FVector& Target);
+
+	/*
+	 * if we make a function virtual to override it in c++ you cannot call it in blueprint
+	 * the same goes for BlueprintImplementableEvent but in c++
+	 * so we use BlueprintNativeEvent so we can use it in both 
+	 */
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	UAnimMontage* GetHitReactMontage();
 };

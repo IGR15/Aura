@@ -6,8 +6,10 @@
 #include "AbilitySyste/AuraAbilitySystemComponent.h"
 #include "AbilitySyste/AuraAbilitySystemLibrary.h"
 #include "AbilitySyste/AuraAttributeSet.h"
+#include "AuraGameplayTags.h"
 #include "Aura/Aura.h"
 #include "Components/WidgetComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "UI/Widget/AuraUserWidget.h"
 
 AAuraEnemy::AAuraEnemy()
@@ -44,10 +46,10 @@ int32 AAuraEnemy::GetPlayerLevel()
 {
 	return level;
 }
-
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	GetCharacterMovement()->MaxWalkSpeed=BasewalkSpeed;
 
 	InitAbilityActorInfor();
 
@@ -75,13 +77,22 @@ void AAuraEnemy::BeginPlay()
 			}
 
 		);
+		
+		AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Effects_HitReact,EGameplayTagEventType::NewOrRemoved).AddUObject(
+        //this is how we bind a call back to a delegate
+		this,
+		&AAuraEnemy::HitReactTagChanged
+		);// creates an event when a tag has been add or removed 
 
 		//these broadcasts are for initializing the attributes
 		OnHealthChanged.Broadcast(AuraAS->GetHealth());
 		OnMaxHealthChanged.Broadcast(AuraAS->GetMaxHealth());
 	}
-	
-	
+}
+void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallBackTag, int32 NewCount)
+{
+	 bHitReacting=NewCount>0;
+	GetCharacterMovement()->MaxWalkSpeed=bHitReacting ?0.0f:BasewalkSpeed;
 }
 
 void AAuraEnemy::InitAbilityActorInfor()
