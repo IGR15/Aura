@@ -10,9 +10,11 @@
 struct AuraDamageStatics
 {
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Armor);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(BlockChance);
 	AuraDamageStatics()
 	{
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,Armor,Target,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,BlockChance,Target,false);
 	}
 };
 static const AuraDamageStatics& DamageStatics()
@@ -23,6 +25,7 @@ static const AuraDamageStatics& DamageStatics()
 UExecCalc_Damage::UExecCalc_Damage()
 {
 	RelevantAttributesToCapture.Add(DamageStatics().ArmorDef);
+	RelevantAttributesToCapture.Add(DamageStatics().BlockChanceDef);
 }
 
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
@@ -38,17 +41,23 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	const FGameplayTagContainer* SourceTages=Spec.CapturedSourceTags.GetAggregatedTags();
 	const FGameplayTagContainer* TargetTags=Spec.CapturedTargetTags.GetAggregatedTags();
-
-	//get Damage set by caller magnitude
-	float Damage=Spec.GetSetByCallerMagnitude(FAuraGameplayTags::Get().Damage);
-
 	FAggregatorEvaluateParameters EvaluateParams;
 	EvaluateParams.SourceTags=SourceTages;
 	EvaluateParams.TargetTags=TargetTags;
 
+	//get Damage set by caller magnitude
+	float Damage=Spec.GetSetByCallerMagnitude(FAuraGameplayTags::Get().Damage);
+
+	//Capture BlockChance on Target, and determine if there was a successful Block
+	// if block, halve the damage
+	float TargetBlockChance=0.f;
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().BlockChanceDef,EvaluateParams,TargetBlockChance);
+
+	TargetBlockChance=FMath::Max<float>(TargetBlockChance,0.f);
+
+	const bool bBlocked=FMath::RandRange(1,100)<TargetBlockChance;
+	Damage=bBlocked ? Damage / 2.f : Damage;
 	
-
-
 	const FGameplayModifierEvaluatedData EvaluatedData(UAuraAttributeSet::GetIncomingDamageAttribute(),EGameplayModOp::Additive,Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);
 	
