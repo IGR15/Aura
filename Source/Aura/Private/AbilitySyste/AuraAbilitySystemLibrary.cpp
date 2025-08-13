@@ -44,14 +44,14 @@ UMenuWidgetController* UAuraAbilitySystemLibrary::GetAttributeMenuWidgetControll
 
 void UAuraAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* WorldContextObject,ECharacterClass CharacterClass, float level,UAbilitySystemComponent* ASC)
 {
-	AAuraGameModeBase* GameMode= Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (GameMode==nullptr)return;
+
 
 	AActor* AvatarActor=ASC->GetAvatarActor();
 
 	FGameplayEffectContextHandle PrimaryContextHandle= ASC->MakeEffectContext();
 	PrimaryContextHandle.AddSourceObject(AvatarActor);
-	UCharacterClassInfo* CharacterClassInfo=GameMode->CharacterClassInfo;
+	UCharacterClassInfo* CharacterClassInfo=GetCharacterClassInfo(WorldContextObject);
+	if (!CharacterClassInfo)return;
 	FCharacterClassDefaultInfo ClassDefaultInfo=CharacterClassInfo->GetCharacterClassInfo(CharacterClass);
 	FGameplayEffectSpecHandle PrimarySpecHandle= ASC->MakeOutgoingSpec(ClassDefaultInfo.PrimaryAttributes,level,PrimaryContextHandle);
 	ASC->ApplyGameplayEffectSpecToSelf(*PrimarySpecHandle.Data.Get());
@@ -69,14 +69,21 @@ void UAuraAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* World
 
 void UAuraAbilitySystemLibrary::GiveStartupAbilites(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
 {
-	AAuraGameModeBase* GameMode= Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (GameMode==nullptr)return;
-	
-	UCharacterClassInfo* CharacterClassInfo=GameMode->CharacterClassInfo;
+	UCharacterClassInfo* CharacterClassInfo=GetCharacterClassInfo(WorldContextObject);
+	if (!CharacterClassInfo)return;
 	for (TSubclassOf<UGameplayAbility> abilityClass:	CharacterClassInfo->CommonAbilities)
 	{
 		FGameplayAbilitySpec AbilitySpec=FGameplayAbilitySpec(abilityClass,1);
 		ASC->GiveAbility(AbilitySpec);
 	}
+	
+}
+
+UCharacterClassInfo* UAuraAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
+{
+	AAuraGameModeBase* GameMode= Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (GameMode==nullptr)return nullptr;
+	
+	return GameMode->CharacterClassInfo;
 	
 }
