@@ -4,6 +4,7 @@
 #include "AbilitySyste/EcecCalc/ExecCalc_Damage.h"
 
 #include "AbilitySystemComponent.h"
+#include "AuraGameplayTags.h"
 #include "AbilitySyste/AuraAttributeSet.h"
 
 struct AuraDamageStatics
@@ -38,16 +39,17 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	const FGameplayTagContainer* SourceTages=Spec.CapturedSourceTags.GetAggregatedTags();
 	const FGameplayTagContainer* TargetTags=Spec.CapturedTargetTags.GetAggregatedTags();
 
+	//get Damage set by caller magnitude
+	float Damage=Spec.GetSetByCallerMagnitude(FAuraGameplayTags::Get().Damage);
+
 	FAggregatorEvaluateParameters EvaluateParams;
 	EvaluateParams.SourceTags=SourceTages;
 	EvaluateParams.TargetTags=TargetTags;
-	float Armor=0.f;
-	++Armor;
-	
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorDef,EvaluateParams,Armor);
-	Armor=FMath::Max<float>(0.f,Armor);
 
-	const FGameplayModifierEvaluatedData EvaluatedData(DamageStatics().ArmorProperty,EGameplayModOp::Additive,Armor);
+	
+
+
+	const FGameplayModifierEvaluatedData EvaluatedData(UAuraAttributeSet::GetIncomingDamageAttribute(),EGameplayModOp::Additive,Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);
 	
 }
