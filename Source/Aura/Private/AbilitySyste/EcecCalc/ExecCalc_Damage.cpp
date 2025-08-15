@@ -10,6 +10,7 @@
 #include "AbilitySyste/Data/CharacterClassInfo.h"
 #include "Interaction/CombatInterface.h"
 
+//Raw Struct To capture attributes
 struct AuraDamageStatics
 {
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Armor);
