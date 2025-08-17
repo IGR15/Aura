@@ -8,6 +8,7 @@
 #include "AuraAbilitySystemLibrary.generated.h"
 
 
+struct FGameplayEffectContextHandle;
 class UAbilitySystemComponent;
 class UMenuWidgetController;
 class UOverlayWidgetController;
@@ -35,4 +36,21 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|Character Class Defaultes")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|Gameplay Effects")
+	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|Gameplay Effects")
+	static bool IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle);
+
+
+
+	/*becase we are passing in a none const refrence the engine thinks its an output pin
+	 * but we need the effectcontexthandle to be in input pin so we used UPARAM(ref) to tell the engine its an
+	 * input pin 
+	 */
+	UFUNCTION(BlueprintCallable)
+	static void SetIsBlockedHit(UPARAM(ref)FGameplayEffectContextHandle& EffectContextHandle,bool bInIsBlockHit);
+	UFUNCTION(BlueprintCallable)
+	static void SetIsCriticalHit(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle,bool bInIsCriticalHit);
 };

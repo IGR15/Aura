@@ -4,6 +4,7 @@
 #include "AbilitySyste/EcecCalc/ExecCalc_Damage.h"
 
 #include "AbilitySystemComponent.h"
+#include "AuraAbilityTypes.h"
 #include "AuraGameplayTags.h"
 #include "AbilitySyste/AuraAbilitySystemLibrary.h"
 #include "AbilitySyste/AuraAttributeSet.h"
@@ -72,8 +73,12 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().BlockChanceDef,EvaluateParams,TargetBlockChance);
 	TargetBlockChance=FMath::Max<float>(TargetBlockChance,0.f);
 
-	// if block, halve the damage
 	const bool bBlocked=FMath::RandRange(1,100)<TargetBlockChance;
+
+	FGameplayEffectContextHandle ContextHandle=Spec.GetContext();
+	UAuraAbilitySystemLibrary::SetIsBlockedHit(ContextHandle,bBlocked);
+	
+	// if block, halve the damage
 	Damage=bBlocked ? Damage / 2.f : Damage;
 	
 	//ArmorPenetration Ignores a percentage of the target's armor 
@@ -84,6 +89,8 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	float SourceArmorPenetration=0.f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorPenetrationDef,EvaluateParams,SourceArmorPenetration);
 	SourceArmorPenetration=FMath::Max<float>(SourceArmorPenetration,0.f);
+
+	
 	const UCharacterClassInfo* CharacterClassInfo=UAuraAbilitySystemLibrary::GetCharacterClassInfo(SourceAvatar);
 	const FRealCurve* ArmorPenetrationCurve= CharacterClassInfo->DamagecalculationCoeffficient->FindCurve(FName("ArmorPenetration"),FString());
 	const float ArmorPenetrationCoefficient= ArmorPenetrationCurve->Eval(SourceCombatInterface->GetPlayerLevel());
@@ -110,8 +117,12 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	const FRealCurve*EffectiveCriticalHitResistanceCurve=CharacterClassInfo->DamagecalculationCoeffficient->FindCurve(FName("CriticalHitResistance"),FString());
 	const float EffectiveCriticalHitResistanceCoefficient=EffectiveCriticalHitResistanceCurve->Eval(TargeteCombatInterface->GetPlayerLevel());
 
+	//Critical Hit Resistance reduces critical hit chance by a certain percentage 
 	const float EffectiveSourceCriticalHitChance=SourceCriticalHitChance-TargetCriticalHitResistance*EffectiveCriticalHitResistanceCoefficient;
 	const bool bCriticalHit=FMath::RandRange(1,100)< EffectiveSourceCriticalHitChance;
+	
+	UAuraAbilitySystemLibrary::SetIsCriticalHit(ContextHandle,bCriticalHit);
+	
 	Damage=bCriticalHit ? 2.f*Damage+SourceCriticalHitDamage : Damage;
 	
 	const FGameplayModifierEvaluatedData EvaluatedData(UAuraAttributeSet::GetIncomingDamageAttribute(),EGameplayModOp::Additive,Damage);
