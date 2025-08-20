@@ -20,8 +20,7 @@ public:
 	AAuraAIController();
 
 protected:
-	UPROPERTY()
-	TObjectPtr<UBlackboardComponent> BlackboardComp;
+	
 	
 	UPROPERTY()
 	TObjectPtr<UBehaviorTreeComponent> BehaviorTreeComp;
