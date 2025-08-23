@@ -53,7 +53,10 @@ protected:
 
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Applied Effects")
-	bool bDestoryOnEffectRemoval = false;
+	bool bDestroyOnEffectApplication = false;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Applied Effects")
+	bool bApplyEffectsToEnemies = false;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Applied Effects")
 	TSubclassOf<UGameplayEffect> InsantGampelayEffectClass;

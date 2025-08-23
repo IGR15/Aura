@@ -27,6 +27,8 @@ void AAuraAffectActor::ApplyEffictToActor(AActor* TargetActor, TSubclassOf<UGame
 {
 	//you can do all of this in blueprint
 
+	const bool bIsEnemy=TargetActor->ActorHasTag(FName("Enemy"));
+	if (bIsEnemy && !bApplyEffectsToEnemies)return;
 	
 	UAbilitySystemComponent* TargetAbilitySystemComponent= UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 	if (TargetAbilitySystemComponent==nullptr)return;
@@ -49,10 +51,17 @@ void AAuraAffectActor::ApplyEffictToActor(AActor* TargetActor, TSubclassOf<UGame
 		const auto UID = TargetActor->GetUniqueID();
 		ActiveInfiniteEffects.Add(UID, ActiveEffectHandle);
 	}
+	if (!bIsInfinite)
+	{
+		Destroy();
+	}
 }
 
 void AAuraAffectActor::OnOverlap(AActor* TargetActor)
 {
+	const bool bIsEnemy=TargetActor->ActorHasTag(FName("Enemy"));
+	if (bIsEnemy && !bApplyEffectsToEnemies)return;
+	
 	if (InstantEffectApplicationPolicy==EEffectApplicationPolicy::ApplyOnOverlap)
 	{
 		ApplyEffictToActor(TargetActor, InsantGampelayEffectClass);
@@ -69,6 +78,9 @@ void AAuraAffectActor::OnOverlap(AActor* TargetActor)
 
 void AAuraAffectActor::OnEndverlap(AActor* TargetActor)
 {
+	const bool bIsEnemy=TargetActor->ActorHasTag(FName("Enemy"));
+	if (bIsEnemy && !bApplyEffectsToEnemies)return;
+	
 	if (InstantEffectApplicationPolicy==EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
 		ApplyEffictToActor(TargetActor, InsantGampelayEffectClass);
