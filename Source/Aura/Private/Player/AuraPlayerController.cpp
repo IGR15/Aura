@@ -90,8 +90,12 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				{
 					Spline->AddSplinePoint(PointLec,ESplineCoordinateSpace::World);
 				}
-				CashedDestination=NavPath->PathPoints[NavPath->PathPoints.Num()-1];
-				bAutoRunning=true;
+				if (NavPath->PathPoints.Num()>0)
+				{
+					CashedDestination=NavPath->PathPoints[NavPath->PathPoints.Num()-1];
+					bAutoRunning=true;
+					
+				}
 			}
 		}
 		FollowTime=0.f;
