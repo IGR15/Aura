@@ -34,11 +34,15 @@ public:
 	/*combat interface*/
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 	virtual void Die() override;
-	virtual FVector GetCombatSocketLocation_Implementation()override;
+	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag)override;
 	virtual bool IsDead_Implementation() const override;
 	virtual AActor* GetAvatar_Implementation()  override;
+	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() override;
 	/* end combat interface*/
 
+	UPROPERTY(EditAnywhere,Category="Combat")
+	TArray<FTaggedMontage> AttackMontages;
+	
 protected:
 	bool bDead = false;
 	virtual void BeginPlay() override;
@@ -48,6 +52,10 @@ protected:
 
 	UPROPERTY(EditAnywhere,Category="Combat")
 	FName WeaponTimSocketName;
+	UPROPERTY(EditAnywhere,Category="Combat")
+	FName LeftHandSocketName;
+	UPROPERTY(EditAnywhere,Category="Combat")
+	FName RightHandSocketName;
 
 
 
