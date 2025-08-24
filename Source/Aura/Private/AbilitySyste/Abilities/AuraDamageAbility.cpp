@@ -3,3 +3,18 @@
 
 #include "AbilitySyste/Abilities/AuraDamageAbility.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+
+void UAuraDamageAbility::CauseDamage(AActor* TargetActor)
+{
+	FGameplayEffectSpecHandle DamageSpecHandle= MakeOutgoingGameplayEffectSpec(DamageEffectClass,1.0f);
+	for (auto Pair : DamageTypes)
+	{
+		const float ScaleDamage=Pair.Value.GetValueAtLevel(GetAbilityLevel());
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle,Pair.Key,ScaleDamage);
+	}
+	GetAbilitySystemComponentFromActorInfo()->ApplyGameplayEffectSpecToTarget(*DamageSpecHandle.Data.Get(),
+		UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor));
+	
+}
