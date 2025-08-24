@@ -26,15 +26,21 @@ public:
 
 	UAttributeSet* GetAttributeSet()const {return AttributeSet;}
 
-	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 
-	virtual void Die() override;
 
 	UFUNCTION(NetMulticast,Reliable)
-	virtual void MultiCastHandleDeath();//this is going to handel all the death on the clients 
+	virtual void MultiCastHandleDeath();//this is going to handel all the death on the clients
+
+	/*combat interface*/
+	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+	virtual void Die() override;
+	virtual FVector GetCombatSocketLocation_Implementation()override;
+	virtual bool IsDead_Implementation() const override;
+	virtual AActor* GetAvatar_Implementation()  override;
+	/* end combat interface*/
 
 protected:
-	 
+	bool bDead = false;
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere,Category="Combat")
@@ -43,7 +49,7 @@ protected:
 	UPROPERTY(EditAnywhere,Category="Combat")
 	FName WeaponTimSocketName;
 
-	virtual FVector GetCombatSocketLocation_Implementation()override;
+
 
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
@@ -61,6 +67,8 @@ protected:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Attributes")
 	TSubclassOf<UGameplayEffect> DefaultVitalAttribute;
+
+	
 
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
 
