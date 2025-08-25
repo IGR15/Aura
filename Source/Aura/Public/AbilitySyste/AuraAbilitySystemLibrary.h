@@ -43,6 +43,9 @@ public:
 	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|Gameplay Effects")
 	static bool IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle);
 
+	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|Gameplay Effects")
+	static bool IsNotFriend(AActor* FirstActor,AActor* SecondActor);
+
 
 
 	/*becase we are passing in a none const refrence the engine thinks its an output pin

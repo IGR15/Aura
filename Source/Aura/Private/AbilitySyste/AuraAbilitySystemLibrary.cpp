@@ -122,6 +122,18 @@ bool UAuraAbilitySystemLibrary::IsCriticalHit(const FGameplayEffectContextHandle
 	
 }
 
+bool UAuraAbilitySystemLibrary::IsNotFriend(AActor* FirstActor, AActor* SecondActor)
+{
+	
+
+	const bool bBothArePlayers=FirstActor->ActorHasTag(FName("Player")) && SecondActor->ActorHasTag(FName("Player"));
+	const bool bBothAreEnemy=FirstActor->ActorHasTag(FName("Enemy")) && SecondActor->ActorHasTag(FName("Enemy"));
+
+	const bool bFriends=bBothArePlayers || bBothAreEnemy;
+
+	return !bFriends;
+}
+
 void UAuraAbilitySystemLibrary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, bool bInIsBlockHit)
 {
 	if (FAuraGamePlayEffectContext* AuraEffectContext=static_cast<FAuraGamePlayEffectContext*>(EffectContextHandle.Get()))
