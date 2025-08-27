@@ -8,6 +8,7 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "AbilitySyste/AuraAbilitySystemLibrary.h"
 #include "Aura/Aura.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -60,6 +61,10 @@ void AAuraProjectile::OnsphereOverlap(UPrimitiveComponent* OverlappedComponent, 
                                       UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (DamageEffectSpecHandle.Data.IsValid()&&DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser()==OtherActor)
+	{
+		return;
+	}
+	if (!UAuraAbilitySystemLibrary::IsNotFriend(DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser(),OtherActor))
 	{
 		return;
 	}
