@@ -8,6 +8,7 @@
 
 class AAuraProjectile;
 class UGameplayEffect;
+struct FGameplayTag;
 /**
  * 
  */
@@ -22,7 +23,7 @@ protected:
 	TSubclassOf<AAuraProjectile> ProjectileClass;
 
 	UFUNCTION(BlueprintCallable,Category="ProjectileSpell")
-	void SpawnProjectile(const FVector& ProjectileTargetLocation );
+	void SpawnProjectile(const FVector& ProjectileTargetLocation ,const FGameplayTag& SocketTage);
 
 	
 	
