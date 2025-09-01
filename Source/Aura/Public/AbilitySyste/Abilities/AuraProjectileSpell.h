@@ -23,7 +23,7 @@ protected:
 	TSubclassOf<AAuraProjectile> ProjectileClass;
 
 	UFUNCTION(BlueprintCallable,Category="ProjectileSpell")
-	void SpawnProjectile(const FVector& ProjectileTargetLocation ,const FGameplayTag& SocketTage);
+	void SpawnProjectile(const FVector& ProjectileTargetLocation ,const FGameplayTag& SocketTage,bool bOverridePitch=false,float PitchOverride=0.f);
 
 	
 	
