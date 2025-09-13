@@ -6,6 +6,8 @@
 #include "AbilitySyste/AuraAbilitySystemComponent.h"
 #include "AbilitySyste/AuraAttributeSet.h"
 #include "AbilitySyste/Data/AbilityInfo.h"
+#include "AbilitySyste/Data/LevelUpInfo.h"
+#include "Player/AuraPlayerState.h"
 
 void UOverlayWidgetController::BroadCastInitValues()
 {
@@ -22,8 +24,11 @@ void UOverlayWidgetController::BroadCastInitValues()
 
 void UOverlayWidgetController::BindCallbacks()
 {
+	AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
+	AuraPlayerState->OnXPChangedDelegate.AddUObject(this,&UOverlayWidgetController::OnXPChanged);
 	// Cast base attribute set to the specific AuraAttributeSet subclass
 	const UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
+
 
 	// Subscribe Health attribute changes to OnHealthChanged delegate
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
@@ -104,5 +109,32 @@ void UOverlayWidgetController::OnInitializeStartupAbilities(UAuraAbilitySystemCo
 		AbilityInfoDelegate.Broadcast(Info);
 	});
 	AuraAbilitySystemComponent->ForEachAbility(BroadCastDelegate);
+}
+
+void UOverlayWidgetController::OnXPChanged(int32 NewXp)const
+{
+	const AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
+	const ULevelUpInfo* LevelUpInfo =AuraPlayerState->LevelUpInfo;
+
+	checkf(LevelUpInfo,TEXT("Unabled to find levelupinfo. fill out auraplayerstate Blueprint"));
+
+	const int32 Level=LevelUpInfo->FindLevelForXP(NewXp);
+	const int32 MaxLevel=LevelUpInfo->LevelUpInfo.Num()-1;
+
+	if (Level<=MaxLevel&&Level>0)
+	{
+
+		const int32 LevelUpReq=LevelUpInfo->LevelUpInfo[Level].LevelUpRequirement;
+		const int32 PreviousLevelUpRequirement=LevelUpInfo->LevelUpInfo[Level-1].LevelUpRequirement;
+
+		const int32 DeltaLevelReq=LevelUpReq-PreviousLevelUpRequirement;
+		const int32 XPForThisLevel=NewXp- PreviousLevelUpRequirement;
+
+		const float XPBarPercent=static_cast<float>(XPForThisLevel) / static_cast<float>(DeltaLevelReq);
+
+		OnXPPercentChangedDelegate.Broadcast(XPBarPercent);
+		
+	}
+
 }
 

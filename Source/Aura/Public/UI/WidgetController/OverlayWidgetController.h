@@ -66,6 +66,9 @@ class AURA_API UOverlayWidgetController : public UAuraWidgetController
 	UPROPERTY(BlueprintAssignable,Category="GAS|Messages")
 	FAbilityInfoSignature AbilityInfoDelegate;
 
+	UPROPERTY(BlueprintAssignable,Category="GAS|XP")
+	FOnAttributeChangedSignature OnXPPercentChangedDelegate;
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="WidgetData")
@@ -78,6 +81,9 @@ protected:
 	T* GetDataTableRowByTag(UDataTable* DataTable,const FGameplayTag& Tag);
 
 	void OnInitializeStartupAbilities(UAuraAbilitySystemComponent* AuraAbilitySystemComponent);
+
+	void OnXPChanged(int32 NewXp)const;
+	
 };
 
 template <typename T>
