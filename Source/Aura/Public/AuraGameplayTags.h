@@ -34,6 +34,9 @@ public:
 	FGameplayTag Attributes_Primary_Resilience;
 	FGameplayTag Attributes_Primary_Vigor;
 
+	//Meta
+	FGameplayTag Attributes_Meta_IncomingXP;
+
 	//input
 	FGameplayTag InputTag_LMB;
 	FGameplayTag InputTag_RMB;

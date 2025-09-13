@@ -22,6 +22,7 @@ AAuraCharacter::AAuraCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
+	CharacterClass=ECharacterClass::Mage;
 }
 
 void AAuraCharacter::PossessedBy(AController* NewController)

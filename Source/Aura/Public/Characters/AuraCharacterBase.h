@@ -43,6 +43,7 @@ public:
 	virtual UNiagaraSystem* GetBloodEffect_Implementation() override;
 	virtual int32 GetMinionCount_Implementation() override;
 	virtual void IncrementMinionCount_Implementation(int32 Amount) override;
+	virtual ECharacterClass GetCharacterClass_Implementation() override;
 	/* end combat interface*/
 
 	UPROPERTY(EditAnywhere,Category="Combat")
@@ -51,6 +52,9 @@ public:
 protected:
 	bool bDead = false;
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="charcter class defaults")
+	ECharacterClass CharacterClass=ECharacterClass::Warrior;
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
@@ -120,6 +124,9 @@ protected:
 private:
 	UPROPERTY(EditAnywhere,Category="Abilities")
 	TArray<TSubclassOf<UGameplayAbility>>StartUpAbilities;
+
+	UPROPERTY(EditAnywhere,Category="Abilities")
+	TArray<TSubclassOf<UGameplayAbility>>StartUpPassiveAbilities;
 
 	UPROPERTY(EditAnywhere,Category="combat")
 	TObjectPtr<UAnimMontage>HitReactMontage;

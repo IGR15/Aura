@@ -92,6 +92,18 @@ void UAuraAbilitySystemLibrary::GiveStartupAbilites(const UObject* WorldContextO
 	}
 	
 }
+int32 UAuraAbilitySystemLibrary::GetXPRewardForClassAndLevel(const UObject* WorldContextObject,
+	ECharacterClass CharacterClass, int32 CharacterLevel)
+{
+	UCharacterClassInfo* CharacterClassInfo=GetCharacterClassInfo(WorldContextObject);
+	if (!CharacterClassInfo)return 0;
+
+	const FCharacterClassDefaultInfo& Info= CharacterClassInfo->GetCharacterClassInfo(CharacterClass);
+
+	const float XPReward=Info.XPReward.GetValueAtLevel(CharacterLevel);
+
+	return static_cast<int32>(XPReward);
+}
 
 UCharacterClassInfo* UAuraAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
 {
@@ -172,3 +184,5 @@ void UAuraAbilitySystemLibrary::GetLivePlayersWithInRadius(const UObject* WorldC
 		}
 	}
 }
+
+

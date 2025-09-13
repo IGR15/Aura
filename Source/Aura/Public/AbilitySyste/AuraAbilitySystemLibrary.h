@@ -60,5 +60,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	static void GetLivePlayersWithInRadius(const UObject* WorldContextObject,TArray<AActor*>& OutOverlappingActors,const TArray<AActor*>& ActorsToIgnore,float Radius,const FVector& SphereOrigin);
 
-
+	static int32 GetXPRewardForClassAndLevel(const UObject* WorldContextObject,ECharacterClass CharacterClass,int32 CharacterLevel);
 };
