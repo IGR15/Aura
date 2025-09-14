@@ -29,6 +29,12 @@ void UOverlayWidgetController::BindCallbacks()
 	// Cast base attribute set to the specific AuraAttributeSet subclass
 	const UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
 
+	AuraPlayerState->OnLevelChangedDelegate.AddLambda(
+		[this](int32 NewLevel)
+		{
+			OnPlayerLevelChangeDelegate.Broadcast(NewLevel);
+		}
+		);
 
 	// Subscribe Health attribute changes to OnHealthChanged delegate
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(

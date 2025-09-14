@@ -9,10 +9,8 @@
 #include "Net/UnrealNetwork.h"
 #include "AuraGameplayTags.h"
 #include "AbilitySyste/AuraAbilitySystemLibrary.h"
-#include "Aura/AuraLogChannels.h"
 #include "Interaction/CombatInterface.h"
 #include "Interaction/PlayerInterface.h"
-#include "Kismet/GameplayStatics.h"
 #include "Player/AuraPlayerController.h"
 
 FEffectProperties::FEffectProperties()
@@ -218,8 +216,28 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	{
 		const float LocalIncomingXP=GetIncomingXP();
 		SetIncomingXP(0.f);
-		if (Properties.SourceCharacter->Implements<UPlayerInterface>())
+		//Source Character is the owner, since GA_ListenForEvent Applies GE_EVentBasedEffect, Adding to IncomingXP
+		if (Properties.SourceCharacter->Implements<UPlayerInterface>() && Properties.SourceCharacter->Implements<UCombatInterface>())
 		{
+			const int32 CurrentLevel=ICombatInterface::Execute_GetPlayerLevel(Properties.SourceCharacter);
+			const int32 CurrentXP=IPlayerInterface::Execute_GetXP(Properties.SourceCharacter);
+
+			const int32 NewLevel=IPlayerInterface::Execute_FindLevelForXP(Properties.SourceCharacter,CurrentXP + LocalIncomingXP);
+			const int32 NumLevelUps=NewLevel - CurrentLevel;
+			if (NumLevelUps>0)
+			{
+				const int32 AttributePointsReward=IPlayerInterface::Execute_GetAttributePointsReward(Properties.SourceCharacter,CurrentLevel);
+				const int32 SpellPointsReward=IPlayerInterface::Execute_GetSpellPointsReward(Properties.SourceCharacter,CurrentLevel);
+
+				IPlayerInterface::Execute_AddToPlayerLevel(Properties.SourceCharacter,NumLevelUps);
+				IPlayerInterface::Execute_AddToAttributePoints(Properties.SourceCharacter,AttributePointsReward);
+				IPlayerInterface::Execute_AddToSpellPoints(Properties.SourceCharacter,SpellPointsReward);
+				SetHealth(GetMaxHealth());
+				SetHealth(GetMaxMana());
+
+				
+				IPlayerInterface::Execute_LevelUp(Properties.SourceCharacter);
+			}
 			IPlayerInterface::Execute_AddToXP(Properties.SourceCharacter,LocalIncomingXP);
 		}
 	}
