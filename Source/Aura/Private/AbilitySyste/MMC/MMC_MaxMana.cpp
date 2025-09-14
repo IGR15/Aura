@@ -27,9 +27,11 @@ float UMMC_MaxMana::CalculateBaseMagnitude_Implementation(const FGameplayEffectS
 	GetCapturedAttributeMagnitude(InelligenceDef,Spec,EvaluateParameters,Inelligenc);
 	Inelligenc=FMath::Max<float>(Inelligenc,0.0f);
 	//we can cast source object into an interface that way we can get the player level
-	ICombatInterface* CombatInterface= Cast<ICombatInterface>(	Spec.GetContext().GetSourceObject());
-	const int32 PlayerLevel= CombatInterface->GetPlayerLevel();
-
+	int32 PlayerLevel=1;
+	if (Spec.GetContext().GetSourceObject()->Implements<UCombatInterface>())
+	{
+		PlayerLevel=ICombatInterface::Execute_GetPlayerLevel(Spec.GetContext().GetSourceObject());
+	}
 	return 30.f+2.5f*Inelligenc+5.f*PlayerLevel;
 }
 
