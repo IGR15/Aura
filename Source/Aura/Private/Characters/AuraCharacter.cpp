@@ -2,17 +2,32 @@
 
 
 #include "Characters/AuraCharacter.h"
-
+#include "NiagaraComponent.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySyste/AuraAbilitySystemComponent.h"
 #include "AbilitySyste/Data/LevelUpInfo.h"
+#include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Player/AuraPlayerController.h"
 #include "Player/AuraPlayerState.h"
 #include "UI/HUD/AuraHUD.h"
 
 AAuraCharacter::AAuraCharacter()
 {
+	SpringArmComponent=CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
+	SpringArmComponent->SetupAttachment(GetRootComponent());
+	SpringArmComponent->SetUsingAbsoluteRotation(true);
+	SpringArmComponent->bDoCollisionTest=false;
+
+	CameraComponent=CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+	CameraComponent->SetupAttachment(SpringArmComponent,USpringArmComponent::SocketName);
+	CameraComponent->bUsePawnControlRotation=false;
+	
+	LevelUpNiagaraComponent=CreateDefaultSubobject<UNiagaraComponent>("LevelUpNiagaraComponent");
+	LevelUpNiagaraComponent->SetupAttachment(GetRootComponent());
+	LevelUpNiagaraComponent->bAutoActivate=false;
+	
 	UCharacterMovementComponent* CharacterMovementComponent=GetCharacterMovement();
 	CharacterMovementComponent->bOrientRotationToMovement = true;
 	CharacterMovementComponent->RotationRate = FRotator(0.f, 400.f, 0.f);
@@ -53,7 +68,19 @@ void AAuraCharacter::AddToXP_Implementation(int32 InXP)
 
 void AAuraCharacter::LevelUp_Implementation()
 {
-	
+	MultiCastLevelUpParticles();
+}
+void AAuraCharacter::MultiCastLevelUpParticles_Implementation() const
+{
+	if (IsValid(LevelUpNiagaraComponent))
+	{
+		const FVector CameraLocation=CameraComponent->GetComponentLocation();
+		const FVector NiagaraLocation=LevelUpNiagaraComponent->GetComponentLocation();
+		const FRotator ToCameraRotation=(CameraLocation-NiagaraLocation).Rotation();
+
+		LevelUpNiagaraComponent->SetWorldRotation(ToCameraRotation);
+		LevelUpNiagaraComponent->Activate(true);
+	}
 }
 
 int32 AAuraCharacter::GetXP_Implementation() const
@@ -131,3 +158,5 @@ void AAuraCharacter::InitAbilityActorInfor()
 	}
 	InitializeDefaultAttributes();
 }
+
+
