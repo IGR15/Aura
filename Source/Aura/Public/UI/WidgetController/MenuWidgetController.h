@@ -25,6 +25,9 @@ public:
 	virtual void BindCallbacks()override;
 
 	UPROPERTY(BlueprintAssignable,Category="GAS|Attributes")
+	FOnPlayerStatChangeSignature AttributePointsChangeDelegate;
+	
+	UPROPERTY(BlueprintAssignable,Category="GAS|Attributes")
 	FAttributeInfoSignature AttributeInfoDelegate;
 
 private:

@@ -5,6 +5,7 @@
 #include <utility>
 #include "AbilitySyste/Data/AttributeInfo.h"
 #include "AbilitySyste/AuraAttributeSet.h"
+#include "Player/AuraPlayerState.h"
 
 void UMenuWidgetController::BroadCastInitValues()
 {
@@ -15,6 +16,9 @@ void UMenuWidgetController::BroadCastInitValues()
 	{
 		BroadCastAttributeInfo(Pair.Key,Pair.Value());
 	}
+	AAuraPlayerState* AuraPlayerState= CastChecked<AAuraPlayerState>(PlayerState);
+	AttributePointsChangeDelegate.Broadcast(AuraPlayerState->GetAttributePoints());
+
 	
 }
 
@@ -31,6 +35,13 @@ void UMenuWidgetController::BindCallbacks()
 			}
 		);
 	}
+	AAuraPlayerState* AuraPlayerState= CastChecked<AAuraPlayerState>(PlayerState);
+	AuraPlayerState->OnAttributePointsChangeDelegate.AddLambda(
+		[this](int32 Points)
+	{
+		AttributePointsChangeDelegate.Broadcast(Points);
+	}
+	);
 }
 
 void UMenuWidgetController::BroadCastAttributeInfo(const FGameplayTag& AttributeTag, const FGameplayAttribute& Attribute)const
