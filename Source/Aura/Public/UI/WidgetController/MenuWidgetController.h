@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "MenuWidgetController.generated.h"
 
@@ -29,6 +30,9 @@ public:
 	
 	UPROPERTY(BlueprintAssignable,Category="GAS|Attributes")
 	FAttributeInfoSignature AttributeInfoDelegate;
+
+	UFUNCTION(BlueprintCallable)
+	void UpgradeAttributes(const FGameplayTag& AttributeTag);
 
 private:
 	void  BroadCastAttributeInfo(const FGameplayTag& AttributeTag,const FGameplayAttribute& Attribute)const;

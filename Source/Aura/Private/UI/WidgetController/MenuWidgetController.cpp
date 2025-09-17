@@ -3,6 +3,8 @@
 
 #include "UI/WidgetController/MenuWidgetController.h"
 #include <utility>
+
+#include "AbilitySyste/AuraAbilitySystemComponent.h"
 #include "AbilitySyste/Data/AttributeInfo.h"
 #include "AbilitySyste/AuraAttributeSet.h"
 #include "Player/AuraPlayerState.h"
@@ -42,6 +44,12 @@ void UMenuWidgetController::BindCallbacks()
 		AttributePointsChangeDelegate.Broadcast(Points);
 	}
 	);
+}
+
+void UMenuWidgetController::UpgradeAttributes(const FGameplayTag& AttributeTag)
+{
+	UAuraAbilitySystemComponent* AuraASC= CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	AuraASC->UpgradeAttributes(AttributeTag);
 }
 
 void UMenuWidgetController::BroadCastAttributeInfo(const FGameplayTag& AttributeTag, const FGameplayAttribute& Attribute)const
