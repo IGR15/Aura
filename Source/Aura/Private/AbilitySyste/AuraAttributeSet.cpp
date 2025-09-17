@@ -17,6 +17,12 @@ FEffectProperties::FEffectProperties()
 {
 }
 
+void UAuraAttributeSet::MaximizeVitalAttributes()
+{
+	SetHealth(GetMaxHealth());
+	SetMana(GetMaxMana());
+}
+
 UAuraAttributeSet::UAuraAttributeSet()
 {
 	
@@ -232,8 +238,8 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 				IPlayerInterface::Execute_AddToPlayerLevel(Properties.SourceCharacter,NumLevelUps);
 				IPlayerInterface::Execute_AddToAttributePoints(Properties.SourceCharacter,AttributePointsReward);
 				IPlayerInterface::Execute_AddToSpellPoints(Properties.SourceCharacter,SpellPointsReward);
-				SetHealth(GetMaxHealth());
-				SetHealth(GetMaxMana());
+				bTopOffHealth=true;
+				bTopOffMana=true;
 
 				
 				IPlayerInterface::Execute_LevelUp(Properties.SourceCharacter);
@@ -244,6 +250,24 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	
 	
 }
+
+// void UAuraAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
+// {
+// 	Super::PostAttributeChange(Attribute, OldValue, NewValue);
+// 	if (Attribute==GetMaxHealthAttribute()&&bTopOffHealth)
+// 	{
+// 		SetHealth(GetMaxHealth());
+// 		bTopOffHealth=false;
+// 	}
+// 	if (Attribute==GetMaxManaAttribute()&&bTopOffMana)
+// 	{
+// 		SetMana(GetMaxMana());
+// 		bTopOffMana=false;
+// 	}
+//
+// 	
+// }
+
 void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage,bool bBlockedHit,bool bCriticalHit)const
 {
 	if (Props.SourceCharacter!=Props.TargetCharacter)

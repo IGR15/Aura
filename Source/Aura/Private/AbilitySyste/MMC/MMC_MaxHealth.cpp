@@ -5,6 +5,7 @@
 
 #include "AbilitySyste/AuraAttributeSet.h"
 #include "Interaction/CombatInterface.h"
+#include "Interaction/ModifierDependencyInterface.h"
 
 UMMC_MaxHealth::UMMC_MaxHealth()
 {
@@ -13,6 +14,18 @@ UMMC_MaxHealth::UMMC_MaxHealth()
 	VigorDef.bSnapshot=false;
 
 	RelevantAttributesToCapture.Add(VigorDef);
+}
+
+FOnExternalGameplayModifierDependencyChange* UMMC_MaxHealth::GetExternalModifierDependencyMulticast(
+	const FGameplayEffectSpec& Spec, UWorld* World) const
+{
+	AActor* Instigator=Spec.GetContext().GetInstigator();
+	IModifierDependencyInterface* MDI=Cast<IModifierDependencyInterface>(Instigator);
+	if (MDI)
+	{
+		return MDI->GetOnModifierDependencyChanged();
+	}
+	return Super::GetExternalModifierDependencyMulticast(Spec, World);
 }
 
 float UMMC_MaxHealth::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const

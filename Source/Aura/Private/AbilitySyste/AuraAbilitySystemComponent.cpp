@@ -135,7 +135,11 @@ void UAuraAbilitySystemComponent::ServerUpgradeAttributes_Implementation(const F
 
 	if (GetAvatarActor()->Implements<UPlayerInterface>())
 	{
-		IPlayerInterface::Execute_AddToAttributePoints(GetAvatarActor(),-1);
+		if (IPlayerInterface::Execute_GetAttributePoints(GetAvatarActor()) > 0)
+		{
+			IPlayerInterface::Execute_AddToAttributePoints(GetAvatarActor(),-1);
+		}
+		
 	}
 }
 

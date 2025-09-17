@@ -16,7 +16,7 @@ class AURA_API UMMC_MaxHealth : public UGameplayModMagnitudeCalculation
 
 public:
 	UMMC_MaxHealth();
-
+	virtual FOnExternalGameplayModifierDependencyChange* GetExternalModifierDependencyMulticast(const FGameplayEffectSpec& Spec, UWorld* World) const override;
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
 private:
