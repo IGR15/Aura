@@ -77,7 +77,10 @@ void FAuraGameplayTags::InitilizeNativeGameplayTags()
 	GameplayTags.Abilities_Attack=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Abilities.Attack"),FString("Attack ability Tag"));
 	GameplayTags.Abilities_Summon=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Abilities.Summon"),FString("Summon ability Tag"));
 	GameplayTags.Abilities_Fire_FireBolt=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Abilities.Fire.FireBolt"),FString("FireBolt ability Tag"));
+	GameplayTags.Abilities_Lightning_Electrocute=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Abilities.Lightning.Electrocute"),FString("Electrocute ability Tag"));
 
+
+	
 	GameplayTags.Abilities_HitReact=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Abilities.HitReact"),FString("Hit React Ability"));
 	GameplayTags.Abilities_Status_Locked=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Abilities.Status.Locked"),FString("locked Status tag"));
 	GameplayTags.Abilities_Status_Eligible=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Abilities.Status.Eligible"),FString("Eligible Status tag"));
@@ -92,6 +95,7 @@ void FAuraGameplayTags::InitilizeNativeGameplayTags()
 
 	/*Abilities Cooldown*/
 	GameplayTags.Cooldown_Fire_FireBolt=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Cooldown.Fire.FireBolt"),FString("FireBolt Cooldown ability Tag"));
+	GameplayTags.Cooldown_Lightning_Electrocute=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Cooldown.Lightning.Electrocute"),FString("Electrocute Cooldown ability Tag"));
 
 
 	
