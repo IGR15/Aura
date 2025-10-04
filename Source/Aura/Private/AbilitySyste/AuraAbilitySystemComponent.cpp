@@ -209,6 +209,7 @@ void UAuraAbilitySystemComponent::ServerSpendSpellPoints_Implementation(const FG
 		{
 			AbilitySpec->GetDynamicSpecSourceTags().RemoveTag(GameplayTags.Abilities_Status_Eligible);
 			AbilitySpec->GetDynamicSpecSourceTags().AddTag(GameplayTags.Abilities_Status_Unlocked);
+			Status=GameplayTags.Abilities_Status_Unlocked;
 
 		}
 		else if (Status.MatchesTagExact(GameplayTags.Abilities_Status_Equipped)||Status.MatchesTagExact(GameplayTags.Abilities_Status_Unlocked))
