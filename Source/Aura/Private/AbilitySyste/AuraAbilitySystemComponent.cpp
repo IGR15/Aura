@@ -221,6 +221,24 @@ void UAuraAbilitySystemComponent::ServerSpendSpellPoints_Implementation(const FG
 	}
 }
 
+bool UAuraAbilitySystemComponent::GetDescriptionsByAbilityTag(const FGameplayTag& AbilityTag, FString& OutDescription,
+	FString& OutNextLevelDescription)
+{
+	if (const FGameplayAbilitySpec* AbilitySpec = GetSpecFromAbilityTag(AbilityTag))
+	{
+		if (UAuraGameplayAbility* AuraGameplayAbility=Cast<UAuraGameplayAbility>(AbilitySpec->Ability))
+		{
+			OutDescription=AuraGameplayAbility->GetDescription(AbilitySpec->Level);
+			OutNextLevelDescription=AuraGameplayAbility->GetNextLevelDescription(AbilitySpec->Level+1);
+			return true;
+		}
+	}
+	UAbilityInfo* AbilityInfo =UAuraAbilitySystemLibrary::GetAbilityInfo(GetAvatarActor());
+	OutDescription=UAuraGameplayAbility::GetLockedDescription(AbilityInfo->FindAbilityInfoForTag(AbilityTag).LevelRequirement);
+	OutNextLevelDescription=FString();
+	return false;
+}
+
 void UAuraAbilitySystemComponent::OnRep_ActivateAbilities()
 {
 	Super::OnRep_ActivateAbilities();
