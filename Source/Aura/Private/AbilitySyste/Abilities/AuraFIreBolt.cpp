@@ -7,7 +7,7 @@
 FString UAuraFIreBolt::GetDescription(int32 Level)
 {
 	
-	const float ManaCost=GetManaCost(Level);
+	const float ManaCost=FMath::Abs(GetManaCost(Level));
 	const int32 Damage = GetDamageByDamageType(Level, FAuraGameplayTags::Get().Damage_Fire);
 	const float Cooldown = GetCoolDown(Level);
 	if (Level == 1)
