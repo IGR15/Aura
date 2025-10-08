@@ -102,6 +102,14 @@ void USpellMenuWidgetController::GlobeDeselect()
 
 }
 
+void USpellMenuWidgetController::EquipButtonPressed()
+{
+	const FGameplayTag AbilityType= AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityType;
+
+	WaitForEquipSelectionDelegate.Broadcast(AbilityType);
+	bWaitForEquipSelection=true;
+}
+
 void USpellMenuWidgetController::ShouldEnableButtons(const FGameplayTag& AbilityStatus, int32 SpellPoints,
                                                      bool& bShouldEnableSpellPointsButton, bool& bShouldEnableEquipButton)
 {

@@ -26,6 +26,9 @@ struct FAuraAbilityInfo
 	FGameplayTag CoolDownTag=FGameplayTag();
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	FGameplayTag AbilityType=FGameplayTag();
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TObjectPtr<const UTexture2D> Icon=nullptr;
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
@@ -36,7 +39,6 @@ struct FAuraAbilityInfo
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TSubclassOf<UGameplayAbility> Ability;
-	
 	
 };
 /**
