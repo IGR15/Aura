@@ -139,7 +139,7 @@ void USpellMenuWidgetController::SpellRowGlobePressed(const FGameplayTag& SlotTa
 	if (!SelectedAbilityType.MatchesTagExact(AbilityType))return;
 
 	
-	
+	GetAuraASC()->ServerEquipAbility(SelectedAbility.Ability,SlotTag);
 }
 
 void USpellMenuWidgetController::OnAbilityEquipped(const FGameplayTag& AbilityTag, const FGameplayTag& Status,
