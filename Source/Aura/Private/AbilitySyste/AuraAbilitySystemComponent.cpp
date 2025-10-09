@@ -247,13 +247,13 @@ void UAuraAbilitySystemComponent::ServerEquipAbility_Implementation(const FGamep
 		const FAuraGameplayTags& GameplayTags=FAuraGameplayTags::Get();
 		const FGameplayTag& PrevSlot=GetInputTagFromSpec(*AbilitySpec);
 		const FGameplayTag Status=GetStatusTagFromSpec(*AbilitySpec);
-
-		if (const bool bStatusValid=Status==GameplayTags.Abilities_Status_Equipped || Status==GameplayTags.Abilities_Status_Unlocked)
+		const bool bStatusValid=Status==GameplayTags.Abilities_Status_Equipped || Status==GameplayTags.Abilities_Status_Unlocked;
+		if (bStatusValid)
 		{
 			// Remove this InputTag (Slot) form any Ability that has it.
 			ClearAbilitiesOfSlot(Slot);
 			// Clear this ability's Slot , Just in case ,it's a different slot
-			ClearAbilitiesOfSlot(AbilityTag);
+			ClearSlot(AbilitySpec);
 			// Now, assign this ability to this slot (InputTag)
 			AbilitySpec->GetDynamicSpecSourceTags().AddTag(Slot);
 			if (Status.MatchesTagExact(GameplayTags.Abilities_Status_Unlocked))
