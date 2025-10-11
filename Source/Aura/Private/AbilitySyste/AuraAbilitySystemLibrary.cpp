@@ -2,9 +2,12 @@
 
 
 #include "AbilitySyste/AuraAbilitySystemLibrary.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Engine/OverlapResult.h"
 #include "AbilitySystemComponent.h"
 #include "AuraAbilityTypes.h"
+#include "AuraGameplayTags.h"
 #include "Game/AuraGameModeBase.h"
 #include "UI/WidgetController/AuraWidgetController.h"
 
@@ -127,6 +130,42 @@ int32 UAuraAbilitySystemLibrary::GetXPRewardForClassAndLevel(const UObject* Worl
 	const float XPReward=Info.XPReward.GetValueAtLevel(CharacterLevel);
 
 	return static_cast<int32>(XPReward);
+}
+
+FGameplayEffectContextHandle UAuraAbilitySystemLibrary::ApplyDamageEffect(const FDamageEffectParams& DamageEffectParams)
+{
+	const FAuraGameplayTags& GameplayTags=FAuraGameplayTags::Get();
+	
+	const AActor* SourceAvatarActor=DamageEffectParams.SourceASC->GetAvatarActor();
+	FGameplayEffectContextHandle EffectContextHandle= DamageEffectParams.SourceASC->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(SourceAvatarActor);
+	FGameplayEffectSpecHandle SpecHandle= DamageEffectParams.SourceASC->MakeOutgoingSpec(DamageEffectParams.DamageGameplayEffectClass,
+		DamageEffectParams.AbilityLevel,
+		EffectContextHandle);
+
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,
+		DamageEffectParams.DamageType,
+		DamageEffectParams.BaseDamage);
+
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,
+		GameplayTags.Debuff_Chance,
+		DamageEffectParams.DebuffChance);
+	
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,
+		GameplayTags.Debuff_Damage,
+		DamageEffectParams.DebuffDamage);
+	
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,
+		GameplayTags.Debuff_Duration,
+		DamageEffectParams.DebuffDuration);
+	
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,
+		GameplayTags.Debuff_Frequency,
+		DamageEffectParams.DebuffFrequency);
+	
+	DamageEffectParams.TargetASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
+
+	return EffectContextHandle;
 }
 
 UCharacterClassInfo* UAuraAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)

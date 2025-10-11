@@ -47,11 +47,7 @@ public:
 	FGameplayTag InputTag_Passive_1;
 	FGameplayTag InputTag_Passive_2;
 
-	//Damage Resistances
-	FGameplayTag Attributes_Resistance_Fire;
-	FGameplayTag Attributes_Resistance_Lightning;
-	FGameplayTag Attributes_Resistance_Arcane;
-	FGameplayTag Attributes_Resistance_Physical;
+	
 	//Damage
 	FGameplayTag Damage;
 
@@ -59,7 +55,22 @@ public:
 	FGameplayTag Damage_Lightning;
 	FGameplayTag Damage_Arcane;
 	FGameplayTag Damage_Physical;
+//Damage Resistances
+	FGameplayTag Attributes_Resistance_Fire;
+	FGameplayTag Attributes_Resistance_Lightning;
+	FGameplayTag Attributes_Resistance_Arcane;
+	FGameplayTag Attributes_Resistance_Physical;
 
+	FGameplayTag Debuff_Burn;
+	FGameplayTag Debuff_Stun;
+	FGameplayTag Debuff_Arcane;
+	FGameplayTag Debuff_Physical;
+
+	FGameplayTag Debuff_Chance;
+	FGameplayTag Debuff_Damage;
+	FGameplayTag Debuff_Frequency;
+	FGameplayTag Debuff_Duration;
+	
 	FGameplayTag Abilities_None;
 	
 	FGameplayTag Abilities_Attack;
@@ -100,6 +111,7 @@ public:
 
 	
 	TMap<FGameplayTag,FGameplayTag>DamageTypesToResistance;
+	TMap<FGameplayTag,FGameplayTag>DamageTypesToDebuffs;
 
 	FGameplayTag Effects_HitReact;
 

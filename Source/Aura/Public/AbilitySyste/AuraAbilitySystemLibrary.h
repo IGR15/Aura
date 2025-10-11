@@ -8,6 +8,7 @@
 #include "AuraAbilitySystemLibrary.generated.h"
 
 
+struct FDamageEffectParams;
 class UAbilityInfo;
 class AAuraHUD;
 struct FWidgetControllerParams;
@@ -76,4 +77,7 @@ public:
 	static void GetLivePlayersWithInRadius(const UObject* WorldContextObject,TArray<AActor*>& OutOverlappingActors,const TArray<AActor*>& ActorsToIgnore,float Radius,const FVector& SphereOrigin);
 
 	static int32 GetXPRewardForClassAndLevel(const UObject* WorldContextObject,ECharacterClass CharacterClass,int32 CharacterLevel);
+
+	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|Damage Effect")
+	static FGameplayEffectContextHandle ApplyDamageEffect(const FDamageEffectParams& DamageEffectParams);
 };

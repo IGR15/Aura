@@ -64,8 +64,26 @@ void FAuraGameplayTags::InitilizeNativeGameplayTags()
 	GameplayTags.DamageTypesToResistance.Add(GameplayTags.Damage_Lightning,GameplayTags.Attributes_Resistance_Lightning);
 	GameplayTags.DamageTypesToResistance.Add(GameplayTags.Damage_Arcane,GameplayTags.Attributes_Resistance_Arcane);
 	GameplayTags.DamageTypesToResistance.Add(GameplayTags.Damage_Physical,GameplayTags.Attributes_Resistance_Physical);
+	/*
+	 * Debuff Types
+	 */
+	GameplayTags.Debuff_Burn=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Brun"),FString("Fire Debuff"));
+	GameplayTags.Debuff_Stun=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Stun"),FString("Lightning Debuff"));
+	GameplayTags.Debuff_Arcane=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Arcane"),FString("Arcane Debuff"));
+	GameplayTags.Debuff_Physical=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Physical"),FString("Physical Debuff"));
+	
+	GameplayTags.Debuff_Chance=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Chance"),FString("Chance to apply Debuff"));
+	GameplayTags.Debuff_Damage=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Damage"),FString("amount of damage caused by the debuff"));
+	GameplayTags.Debuff_Duration=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Duration"),FString("how long is the debuff"));
+	GameplayTags.Debuff_Frequency=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Frequency"),FString("the frequency of the debuff"));
 
-
+	/*
+	 * Map of Damage types to Debuffs
+	 */
+	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Damage_Fire,GameplayTags.Debuff_Burn);
+	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Damage_Lightning,GameplayTags.Debuff_Stun);
+	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Damage_Arcane,GameplayTags.Debuff_Arcane);
+	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Damage_Physical,GameplayTags.Debuff_Physical);
 	
 	/*
 	 * Effects
