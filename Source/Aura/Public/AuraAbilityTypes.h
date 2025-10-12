@@ -48,6 +48,7 @@ USTRUCT(BlueprintType)
 struct FAuraGamePlayEffectContext : public FGameplayEffectContext
 {
 	GENERATED_BODY()
+public:
 	virtual UScriptStruct* GetScriptStruct() const override
 	{
 		return StaticStruct();
@@ -69,16 +70,41 @@ struct FAuraGamePlayEffectContext : public FGameplayEffectContext
 
 	bool IsCriticalHit()const { return bIsCriticalHit;}
 	bool IsBlockedHit()const { return bIsBlockedHit;}
+	bool IsSuccessFullDebuff()const {return bIsSuccessfulDebuff;}
+	float GetDebuffDamage()const {return DebuffDamage;}
+	float GetDebuffDuration()const {return DebuffDuration;}
+	float GetDebuffFrequency()const {return DebuffFrequency;}
+	TSharedPtr<FGameplayTag> GetDamageType()const {return DamageType;}
 
 	void SetIsCriticalHit(bool bInIsCriticalHit){bIsCriticalHit=bInIsCriticalHit;}
 	void SetIsBlockedHit(bool bInIsBlockedHit){bIsBlockedHit=bInIsBlockedHit;}
+	void SetIsSuccessFullDebuf(bool bInSuccessFullDebuff){bIsSuccessfulDebuff=bInSuccessFullDebuff;}
+	void SetDebuffDamage(float InDamage){DebuffDamage=InDamage;}
+	void SetDebuffDuration(float InDebuffDuration){DebuffDuration=InDebuffDuration;}
+	void SetDebuffFrequency(float InFrequency){DebuffFrequency=InFrequency;}
+	void SetDamageType(const TSharedPtr<FGameplayTag>& InDamageType){DamageType=InDamageType;}
+
+	
 
 protected:
 	UPROPERTY()
 	bool bIsBlockedHit=false;
 	UPROPERTY()
 	bool bIsCriticalHit=false;
+
+	UPROPERTY()
+	bool bIsSuccessfulDebuff=false;
+
+	UPROPERTY()
+	float DebuffDamage=0.f;
+
+	UPROPERTY()
+	float DebuffDuration=0.f;
+
+	UPROPERTY()
+	float DebuffFrequency=0.f;
 	
+	TSharedPtr<FGameplayTag>DamageType;
 	
 };
 template <>
