@@ -4,6 +4,7 @@
 #include "AbilitySyste/AuraAttributeSet.h"
 #include "GameplayEffectComponents/TargetTagsGameplayEffectComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AuraAbilityTypes.h"
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
@@ -265,10 +266,22 @@ void UAuraAttributeSet::Debuff(const FEffectProperties& Props)
 	Effect->StackingType=EGameplayEffectStackingType::AggregateBySource;
 	Effect->StackLimitCount=1;
 	//Modifiers
-	int32 Index = Effect->Modifiers.Add(FGameplayModifierInfo());
-	FGameplayModifierInfo& Modifier=Effect->Modifiers.Last();
-	
-	
+	const int32 Index = Effect->Modifiers.Add(FGameplayModifierInfo());
+	FGameplayModifierInfo& ModifierInfo=Effect->Modifiers[Index];
+
+	ModifierInfo.ModifierMagnitude=FScalableFloat(DebuffDamage);
+	ModifierInfo.ModifierOp=EGameplayModOp::Additive;
+	ModifierInfo.Attribute=UAuraAttributeSet::GetIncomingDamageAttribute();
+
+	if (FGameplayEffectSpec* MutableSpec=new FGameplayEffectSpec(Effect,EffectContextHandle,1.f))
+	{
+		FAuraGamePlayEffectContext* AuraContext=static_cast<FAuraGamePlayEffectContext*>(EffectContextHandle.Get());
+		TSharedPtr<FGameplayTag>DebuffDamageType=MakeShareable(new FGameplayTag(DamageType));
+		AuraContext->SetDamageType(DebuffDamageType);
+
+		Props.TargetAsc->ApplyGameplayEffectSpecToSelf(*MutableSpec);
+
+	}
 }
 
 void UAuraAttributeSet::HandleIncomingXP(const FEffectProperties& Props)
