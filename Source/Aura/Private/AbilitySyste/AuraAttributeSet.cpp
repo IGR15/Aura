@@ -2,7 +2,7 @@
 
 
 #include "AbilitySyste/AuraAttributeSet.h"
-
+#include "GameplayEffectComponents/TargetTagsGameplayEffectComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
@@ -235,6 +235,39 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 }
 void UAuraAttributeSet::Debuff(const FEffectProperties& Props)
 {
+	/*
+	 * this is how we make a dynamic game play effect 
+	 */
+
+	const FAuraGameplayTags& GameplayTags=FAuraGameplayTags::Get();
+	FGameplayEffectContextHandle EffectContextHandle=Props.SourceASC->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(Props.SourceAvatarActor);
+
+	const FGameplayTag DamageType= UAuraAbilitySystemLibrary::GetDamageType(Props.EffectContextHandle);
+	const float DebuffDamage=UAuraAbilitySystemLibrary::GetDebuffDamage(Props.EffectContextHandle);
+	const float DebuffDuration=UAuraAbilitySystemLibrary::GetDebuffDurtaion(Props.EffectContextHandle);
+	const float DebuffFrequency=UAuraAbilitySystemLibrary::GetDebuffFrequency(Props.EffectContextHandle);
+	
+	FString DebuffName=FString::Printf(TEXT("DynamicDebuff_%s"),*DamageType.ToString());
+	UGameplayEffect* Effect=NewObject<UGameplayEffect>(GetTransientPackage(),FName(DebuffName));
+
+	Effect->DurationPolicy=EGameplayEffectDurationType::HasDuration;
+	Effect->Period=DebuffFrequency;
+	Effect->DurationMagnitude=FScalableFloat(DebuffDuration);
+
+	//this is how we grant tags
+	//Effect->InheritableOwnedTagsContainer.AddTag(GameplayTags.DamageTypesToDebuffs[DamageType]); -> deprecated ;)
+	FInheritedTagContainer TagContainer=FInheritedTagContainer();
+	UTargetTagsGameplayEffectComponent& Component=Effect->FindOrAddComponent<UTargetTagsGameplayEffectComponent>();
+	TagContainer.AddTag(GameplayTags.DamageTypesToDebuffs[DamageType]);
+	Component.SetAndApplyTargetTagChanges(TagContainer);
+
+	Effect->StackingType=EGameplayEffectStackingType::AggregateBySource;
+	Effect->StackLimitCount=1;
+	//Modifiers
+	int32 Index = Effect->Modifiers.Add(FGameplayModifierInfo());
+	FGameplayModifierInfo& Modifier=Effect->Modifiers.Last();
+	
 	
 }
 
