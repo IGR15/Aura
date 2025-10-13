@@ -180,7 +180,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	FEffectProperties Properties;
 	SetEffectProperties(Data, Properties);
 
-	if (Properties.SourceCharacter->Implements<UCombatInterface>()&&ICombatInterface::Execute_IsDead(Properties.SourceCharacter))return;
+	if (Properties.TargetCharacter->Implements<UCombatInterface>()&&ICombatInterface::Execute_IsDead(Properties.TargetCharacter))return;
 	
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
