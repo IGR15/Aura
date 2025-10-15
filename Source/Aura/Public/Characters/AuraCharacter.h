@@ -39,10 +39,12 @@ public:
 	virtual int32 GetSpellPoints_Implementation() const override;
 	/*EndPlayerInterface*/
 
+	/*Combat Interface*/
 	virtual int32 GetPlayerLevel_Implementation() override;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<UNiagaraComponent>LevelUpNiagaraComponent;
-
+	/*End Combat Interface*/
+	
 private:
 
 	UPROPERTY(VisibleAnywhere)
