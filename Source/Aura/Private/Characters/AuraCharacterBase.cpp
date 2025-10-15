@@ -57,13 +57,13 @@ void AAuraCharacterBase::MultiCastHandleDeath_Implementation(const FVector& Deat
 
 	Weapon->SetEnableGravity(true);
 	Weapon->SetCollisionEnabled(ECollisionEnabled::Type::PhysicsOnly);
-	Weapon->AddImpulse(DeathImpulse);
+	Weapon->AddImpulse(DeathImpulse*0.1f,NAME_None,true);
 
 	GetMesh()->SetEnableGravity(true);
 	GetMesh()->SetSimulatePhysics(true);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::Type::PhysicsOnly);
 	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic,ECR_Block);
-	GetMesh()->AddImpulse(DeathImpulse);
+	GetMesh()->AddImpulse(DeathImpulse,NAME_None,true);
 	
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 	Dissolve();
