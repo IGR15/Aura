@@ -131,7 +131,7 @@ void UAuraFIreBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, co
 
 	
 		Projectile->DamageEffectParams=MakeDamageEffectParams();
-		if (HomingTarget->Implements<UCombatInterface>())
+		if (HomingTarget && HomingTarget->Implements<UCombatInterface>())
 		{
 			Projectile->ProjectileMovement->HomingTargetComponent=HomingTarget->GetRootComponent();
 		}
