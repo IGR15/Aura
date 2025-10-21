@@ -3,6 +3,7 @@
 
 #include "AbilitySyste/Abilities/AuraFIreBolt.h"
 
+#include "AbilitySyste/AuraAbilitySystemLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 FString UAuraFIreBolt::GetDescription(int32 Level)
@@ -104,7 +105,6 @@ FString UAuraFIreBolt::GetNextLevelDescription(int32 Level)
 void UAuraFIreBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTage,
 	bool bOverridePitch, float PitchOverride, AActor* HomingTarget)
 {
-	
 	const bool bIsServer=GetAvatarActorFromActorInfo()->HasAuthority();
 	if (!bIsServer)return;
 	const FVector SocketLocation=ICombatInterface::Execute_GetCombatSocketLocation(GetAvatarActorFromActorInfo(),
@@ -115,34 +115,8 @@ void UAuraFIreBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, co
 	if (bOverridePitch) Rotation.Pitch+=PitchOverride;
 
 	const FVector Forward=Rotation.Vector();
-	const FVector LeftOfSpread=Forward.RotateAngleAxis(-ProjectileSpread/2.f,FVector::UpVector);
-	const FVector RightOfSpreed=Forward.RotateAngleAxis(ProjectileSpread/2.f,FVector::UpVector);
-	
-	// NumProjectiles=FMath::Min(MaxNumProjectiles,GetAbilityLevel());
-	if (NumProjectiles>1)
-	{
-		const float DeltaSpread=ProjectileSpread/(NumProjectiles-1);
-		for (int32 i=0;i<NumProjectiles;i++)
-		{
-			const FVector Direction=LeftOfSpread.RotateAngleAxis(DeltaSpread*i,FVector::UpVector);
-			UKismetSystemLibrary::DrawDebugArrow(
-				GetAvatarActorFromActorInfo(),
-				SocketLocation,
-				SocketLocation+Direction*75.f,
-				10.f,
-				FLinearColor::Green,
-				120,
-				5
-				);
 
-
-		}
-	}
-	else
-	{
-		
-	}
-	
-	UKismetSystemLibrary::DrawDebugArrow(GetAvatarActorFromActorInfo(),SocketLocation,SocketLocation+Rotation.Vector()*100.f,10.f,FLinearColor::Green,120,5);
+	TArray<FVector>Directions=UAuraAbilitySystemLibrary::EvenlyRotatedVectors(Forward,FVector::UpVector,ProjectileSpread,NumProjectiles);
+	TArray<FRotator> Rotaions=UAuraAbilitySystemLibrary::EvenlySpaceDRotators(Forward,FVector::UpVector,ProjectileSpread,NumProjectiles);
 }
 
