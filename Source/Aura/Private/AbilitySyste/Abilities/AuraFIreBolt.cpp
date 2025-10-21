@@ -116,8 +116,8 @@ void UAuraFIreBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, co
 	if (bOverridePitch) Rotation.Pitch+=PitchOverride;
 
 	const FVector Forward=Rotation.Vector();
-
-	TArray<FRotator>Rotations=UAuraAbilitySystemLibrary::EvenlySpaceDRotators(Forward,FVector::UpVector,ProjectileSpread,NumProjectiles);
+	int32 EffectiveNumProjectiles=FMath::Min(NumProjectiles,GetAbilityLevel());
+	TArray<FRotator>Rotations=UAuraAbilitySystemLibrary::EvenlySpaceDRotators(Forward,FVector::UpVector,ProjectileSpread,EffectiveNumProjectiles);
 	for (const FRotator& Rot : Rotations)
 	{
 		FTransform SpawnTransform;
