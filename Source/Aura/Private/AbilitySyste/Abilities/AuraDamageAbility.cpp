@@ -31,6 +31,8 @@ FDamageEffectParams UAuraDamageAbility::MakeDamageEffectParams(AActor* TargetAct
 	Params.DebuffDuration=DebuffDuration;
 	Params.DebuffFrequency=DebuffFrequency;
 	Params.DeathImpulseMagnitude=DeathImpulseMagnitude;
+	Params.KnockbackForceMagnitude=KnockbackForceMagnitude;
+	Params.KnocKbackChance=KnockbackChance;
 	return Params;
 }
 

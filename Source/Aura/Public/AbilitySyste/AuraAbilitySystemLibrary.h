@@ -78,6 +78,9 @@ public:
 
 	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|Gameplay Effects")
 	static FVector GetDeathImpulse(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|Gameplay Effects")
+	static FVector GetKnockbackForce(const FGameplayEffectContextHandle& EffectContextHandle);
 	
 	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|Gameplay Effects")
 	static bool IsNotFriend(AActor* FirstActor,AActor* SecondActor);
@@ -110,6 +113,9 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|Gameplay Effects")
 	static void SetDeathImpulse(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle,const FVector& InImpulse);
+
+	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|Gameplay Effects")
+	static void SetKnockbackForce(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle,const FVector& InForce);
 
 	
 	UFUNCTION(BlueprintCallable)
