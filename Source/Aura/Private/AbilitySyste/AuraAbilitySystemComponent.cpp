@@ -93,6 +93,7 @@ void UAuraAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& In
 		if (DynamicTag.HasTagExact(InputTag)&&AbilitySpec.IsActive())
 		{
 			AbilitySpecInputReleased(AbilitySpec);
+			//the invoke is for making the wait input released node working
 			InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased, AbilitySpec.Handle, AbilitySpec.GetAbilityInstances().Last()->GetCurrentActivationInfoRef().GetActivationPredictionKey());
 		}
 	}
