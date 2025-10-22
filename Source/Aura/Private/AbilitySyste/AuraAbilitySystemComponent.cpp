@@ -60,6 +60,25 @@ void UAuraAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputT
 			if (!AbilitySpec.IsActive())
 			{
 				TryActivateAbility(AbilitySpec.Handle);
+				
+			}
+		}
+	}
+}
+
+void UAuraAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& InputTag)
+{
+	if (!InputTag.IsValid())return;
+
+	for (auto& AbilitySpec :GetActivatableAbilities())
+	{
+		FGameplayTagContainer& DynamicTag=AbilitySpec.GetDynamicSpecSourceTags();
+		if (DynamicTag.HasTagExact(InputTag))
+		{
+			AbilitySpecInputPressed(AbilitySpec);//this checks if the ability input is pressed
+			if (!AbilitySpec.IsActive())
+			{
+				InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased, AbilitySpec.Handle, AbilitySpec.GetAbilityInstances().Last()->GetCurrentActivationInfoRef().GetActivationPredictionKey());
 			}
 		}
 	}
@@ -71,9 +90,10 @@ void UAuraAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& In
 	for (auto& AbilitySpec :GetActivatableAbilities())
 	{
 		FGameplayTagContainer& DynamicTag=AbilitySpec.GetDynamicSpecSourceTags();
-		if (DynamicTag.HasTagExact(InputTag))
+		if (DynamicTag.HasTagExact(InputTag)&&AbilitySpec.IsActive())
 		{
 			AbilitySpecInputReleased(AbilitySpec);
+			InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased, AbilitySpec.Handle, AbilitySpec.GetAbilityInstances().Last()->GetCurrentActivationInfoRef().GetActivationPredictionKey());
 		}
 	}
 }
