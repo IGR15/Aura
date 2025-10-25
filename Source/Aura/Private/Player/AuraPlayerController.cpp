@@ -63,6 +63,8 @@ void AAuraPlayerController::ShowDamageNumber_Implementation(float DamageAmount,A
 
 void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
+	if(GetASC()&&GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputPressed))return;
+
 	if (InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
 		bTargeting=ThisActor ? true : false;
@@ -72,6 +74,7 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 }
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
+	if(GetASC()&&GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputReleased))return;
 	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
 		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
@@ -108,6 +111,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
+	if(GetASC()&&GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputHeld))return;
 	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
 		if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
@@ -174,6 +178,7 @@ void AAuraPlayerController::SetupInputComponent()
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 {
+	if(GetASC()&&GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputPressed))return;
 	// Get 2D input vector from the input action (X = Right/Left, Y = Forward/Backward)
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
 
@@ -201,6 +206,15 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 }
 void AAuraPlayerController::CurserTrace()
 {
+	if(GetASC()&&GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_CursorTrace))
+	{
+		if (LastActor) LastActor->UnHighLightAcotr();
+		if (ThisActor) ThisActor->UnHighLightAcotr();
+		LastActor = nullptr;
+		ThisActor = nullptr;
+		return;
+	}
+	
 	GetHitResultUnderCursor(ECC_Visibility,false,CurserHit);
 	if (!CurserHit.bBlockingHit) return;
 	LastActor=ThisActor;
