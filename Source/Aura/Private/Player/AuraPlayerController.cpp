@@ -99,7 +99,11 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				{
 					CashedDestination=NavPath->PathPoints[NavPath->PathPoints.Num()-1];
 					bAutoRunning=true;
-					UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ClickNiagaraSystem,CashedDestination);
+					if(GetASC()&&GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputPressed))
+					{
+						UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ClickNiagaraSystem,CashedDestination);
+
+					}
 				}
 			}
 		}
